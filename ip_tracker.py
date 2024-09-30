@@ -2,12 +2,12 @@ import requests
 import time
 import logging
 import os
-from datetime import datetime,date
+from datetime import datetime,date, timedelta
 from dotenv import load_dotenv
 from db_operations import insert_ip_record, insert_log_file_record, insert_speed_test_record, get_last_ip_record, close_connection
 from speed_test import run_speedtest
 from pymongo.errors import ConnectionFailure
-
+from email_report import compile_and_send_report
 load_dotenv()
 
 def get_log_filename():
@@ -35,15 +35,28 @@ def get_public_ip():
 def main():
   check_interval = int(os.getenv("CHECK_INTERVAL"))
   current_date = date.today()
-  log_filename = setup_logging() # Setup logging
+  log_filename = setup_logging()
+  last_report_time = datetime.now()
 
   try:
     while True:
       now = datetime.now()
 
+      # Check if it's time to send a report (every 12 hours)
+      if now - last_report_time > timedelta(hours=12):
+        try:
+          compile_and_send_report()
+          last_report_time = now
+          logging.info("Report sent successfully")
+        except Exception as e:
+          logging.error(f"Error sending report: {e}")
+
       # Check if it's a new day, if so, update logging and record the previous log file
       if now.date() > current_date:
-        insert_log_file_record(os.path.abspath(log_filename), now)
+        try:
+          insert_log_file_record(os.path.abspath(log_filename), now)
+        except ConnectionFailure:
+          logging.warning("Failed to insert log file record due to db connection failure.")
         current_date = now.date()
         log_filename = setup_logging() # Update logging
 

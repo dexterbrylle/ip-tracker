@@ -3,8 +3,6 @@ from datetime import datetime
 from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
-import subprocess
-import json
 
 load_dotenv()
 
@@ -53,8 +51,8 @@ def run_speedtest():
     return None
 
 if __name__ == "__main__":
-  result = run_speedtest()
   print(f"Running speedtest...")
+  result = run_speedtest()
   if result:
     print(f"Download speed: {result['download_speed']} Mbps")
     print(f"Upload speed: {result['upload_speed']} Mbps")

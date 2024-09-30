@@ -5,13 +5,13 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-MONGO_URI = os.getenv("MONGO_URL")
+MONGO_URL = os.getenv("MONGO_URL")
 DB_NAME = os.getenv("MONGO_DB_NAME")
 COLLECTION_NAME = os.getenv("MONGO_COLLECTION")
 LOGS_COLLECTION_NAME = os.getenv("MONGO_LOGS_COLLECTION")
 SPEED_COLLECTION_NAME = os.getenv("MONGO_SPEEDTEST_COLLECTION")
 
-client = MongoClient(MONGO_URI)
+client = MongoClient(MONGO_URL)
 db = client[DB_NAME]
 ip_collection = db[COLLECTION_NAME]
 log_collection = db[LOGS_COLLECTION_NAME]

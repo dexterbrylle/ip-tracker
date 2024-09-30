@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  ip-tracker:
+    build: .
+    volumes:
+      - ./logs:/app/logs
+    environment:
+      - MONGO_URL=mongodb://mongo:27017
+      - MONGO_DB_NAME=ip_speedtest_tracker
+      - MONGO_COLLECTION=ip_addresses
+      - MONGO_LOGS_COLLECTION=log_files
+      - MONGO_SPEEDTEST_COLLECTION=speedtests
+      - CHECK_INTERVAL=900
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+
+  mongodb:
+    image: mongo:latest
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:

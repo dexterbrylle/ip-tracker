@@ -1,0 +1,30 @@
+# Environment variables
+.env
+
+# Logs
+logs/
+*.log
+
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+venv/
+env/
+ip-tracker-env/
+*.venv
+
+# MongoDB data
+mongodb_data/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# IDE specific files
+.vscode/
+.idea/
+
+# Docker
+*.dockerignore
